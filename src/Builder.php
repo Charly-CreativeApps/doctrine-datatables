@@ -103,7 +103,7 @@ class Builder
     {
         $query = clone $this->queryBuilder;
         $columns = &$this->requestParams['columns'];
-        $c = count($columns);
+        $c = (is_array($columns)) ? count($columns) : 0;
         // Search
         if (array_key_exists('search', $this->requestParams)) {
             if ($value = trim($this->requestParams['search']['value'])) {
@@ -198,9 +198,10 @@ class Builder
      */
     public function getResponse()
     {
+        $draw = (array_key_exists('draw', $this->requestParams)) ? $this->requestParams['draw'] : "";
         return array(
             'data' => $this->getData(),
-            'draw' => $this->requestParams['draw'],
+            'draw' => $draw,
             'recordsFiltered' => $this->getRecordsFiltered(),
             'recordsTotal' => $this->getRecordsTotal(),
         );
